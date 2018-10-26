@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "typeface-roboto";
 import MapStyles from './MapStyles.json';
 import { getData } from './apiData.js';
+import { Button, Container, Header, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react'
 import './App.css';
 
 const apiUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEneiCQJX6yzN_Yh1M4FeR7C3_Oo4rYZc&libraries=drawing,geometry,places&callback=initMap';
@@ -17,9 +18,14 @@ class App extends Component {
       visible: false
     };
     // This binding is necessary to make `this` work in the callbacks
-    // that will be used in the app
+    // that will be used in the app-
     this.initMap = this.initMap.bind(this);
   }
+
+  // Click handlers for Semantic UI React Sidebar
+  handleHideClick = () => this.setState({ visible: false })
+  handleShowClick = () => this.setState({ visible: true })
+  handleSidebarHide = () => this.setState({ visible: false })
 
   componentDidMount() {
     // Get FourSquare data provided by Axios and pull
@@ -119,15 +125,55 @@ class App extends Component {
   }
 
   render() {
+    const { visible } = this.state
     return (
-      <div>
-        <div id='map' role='application' tabIndex='-1' ></div>
-        {/* <VenueList
-          venues={this.state.venues}
-          markers={this.state.markers}
-          infowindows={this.state.infowindows}
-        /> */}
-      </div>
+        <Container fluid style={{ height: '100vh' }} >
+          <Menu stackable inverted fluid style={{ margin: 0, padding: '0' }} size='large'>
+            <Menu.Item header ariaRole='banner'>
+              <Header as='h1' color='orange' floated='left'>Sapporo Coffee Locations</Header>
+              <Icon name='coffee' size='large' fitted circular inverted color='orange' />
+            </Menu.Item>
+            <Button.Group>
+              <Button disabled={visible} onClick={this.handleShowClick}>
+              Show sidebar
+              </Button>
+              <Button disabled={!visible} onClick={this.handleHideClick}>
+              Hide sidebar
+              </Button>
+            </Button.Group>
+          </Menu>
+          <main role='main' id='maincontent'>
+          <Sidebar.Pushable as={Segment} >
+            <Sidebar
+              as={Menu}
+              animation='overlay'
+              icon='labeled'
+              inverted
+              onHide={this.handleSidebarHide}
+              vertical
+              visible={visible}
+              width='thin'
+            >
+              <Menu.Item as='a'>
+              <Icon name='home' />
+              Home
+              </Menu.Item>
+              <Menu.Item as='a'>
+              <Icon name='gamepad' />
+              Games
+              </Menu.Item>
+              <Menu.Item as='a'>
+              <Icon name='camera' />
+              Channels
+              </Menu.Item>
+            </Sidebar>
+            <Sidebar.Pusher>
+              <div id='map' role='application' tabIndex='-1' ></div>
+            </Sidebar.Pusher>
+          </Sidebar.Pushable>
+
+          </main>
+        </Container>
     );
   }
 }
