@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import VenueList from './VenueList'
 import "typeface-roboto";
 import MapStyles from './MapStyles.json';
 import { getData } from './apiData.js';
@@ -13,7 +14,6 @@ class App extends Component {
     this.state = {
       venues: [],
       markers: [],
-      infowindows: [],
       map: {},
       visible: false
     };
@@ -42,7 +42,7 @@ class App extends Component {
           venues: data
         }, this.displayMap());
       }
-      console.log(this.state.venues);
+      console.log('Venues', this.state.venues);
     });
   }
 
@@ -58,7 +58,7 @@ class App extends Component {
 
   // Initialize the Google Map
   initMap = () => {
-    const { venues, markers, infowindows } = this.state;
+    const { venues, markers } = this.state;
     // Set initial location of the map center at Sapporo TV Tower
     let sapporoTvTower = {
       lat: 43.0610,
@@ -115,21 +115,18 @@ class App extends Component {
         map.panTo(marker.getPosition());
         infoWindow.open(map, marker);
       });
-      infowindows.push(infoWindow);
       markers.push(marker);
     });
-    this.setState({ infowindows: this.state.infowindows })
     this.setState({ markers: this.state.markers })
-    console.log('markers', this.state.markers)
-    console.log('infowindows', this.state.infowindows)
+    console.log('Markers', this.state.markers)
   }
 
   render() {
-    const { visible } = this.state
+    const { markers, venues, visible } = this.state
     return (
         <Container fluid style={{ height: '100vh' }} >
           <Menu stackable inverted fluid style={{ margin: 0, padding: '0' }} size='large'>
-            <Menu.Item header ariaRole='banner'>
+            <Menu.Item header>
               <Header as='h1' color='orange' floated='left'>Sapporo Coffee Locations</Header>
               <Icon name='coffee' size='large' fitted circular inverted color='orange' />
             </Menu.Item>
@@ -154,18 +151,15 @@ class App extends Component {
               visible={visible}
               width='thin'
             >
-              <Menu.Item as='a'>
-              <Icon name='home' />
-              Home
+              <Menu.Item header>
+                <Header as='h3' color='red'>Filter Coffee Locations:</Header>
               </Menu.Item>
-              <Menu.Item as='a'>
-              <Icon name='gamepad' />
-              Games
-              </Menu.Item>
-              <Menu.Item as='a'>
-              <Icon name='camera' />
-              Channels
-              </Menu.Item>
+              <Menu.Item>
+               <VenueList
+                 venues={venues}
+                 markers={markers}
+               />
+             </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher>
               <div id='map' role='application' tabIndex='-1' ></div>
@@ -189,7 +183,6 @@ let createScript = (url) => {
 
   script.onerror = function () {
     document.write('Load error: Google Maps');
-    alert('There was an error loading the Google Map')
   };
 }
 

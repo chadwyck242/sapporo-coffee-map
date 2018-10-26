@@ -9,7 +9,7 @@ export function getData(callback) {
     intent: 'browse',
     radius: '1000',
     ll: '43.0610, 141.3664',
-    v: '20181024'
+    v: '20181031'
   }
 
   axios.get(endPoint + new URLSearchParams(parameters))
