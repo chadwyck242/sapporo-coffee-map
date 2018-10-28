@@ -44,6 +44,11 @@ class App extends Component {
       }
       console.log('Venues', this.state.venues);
     });
+    // Returns Google API key error if there are issues loading
+    window.gm_authFailure = () =>
+      alert(
+        "Google Maps has encountered an error. Please check the console for more information"
+      );
   }
 
   displayMap = () => {
@@ -131,10 +136,18 @@ class App extends Component {
               <Icon name='coffee' size='large' fitted circular inverted color='orange' />
             </Menu.Item>
             <Button.Group>
-              <Button disabled={visible} onClick={this.handleShowClick}>
+              <Button
+                disabled={visible}
+                onClick={this.handleShowClick}
+                tabIndex='0'
+              >
               Show sidebar
               </Button>
-              <Button disabled={!visible} onClick={this.handleHideClick}>
+              <Button
+                disabled={!visible}
+                onClick={this.handleHideClick}
+                tabIndex='0'
+              >
               Hide sidebar
               </Button>
             </Button.Group>
@@ -148,11 +161,11 @@ class App extends Component {
               inverted
               onHide={this.handleSidebarHide}
               vertical
+              aria-label='Search Menu'
               visible={visible}
-              width='thin'
             >
               <Menu.Item header>
-                <Header as='h3' color='red'>Filter Coffee Locations:</Header>
+                <Header as='h3' color='red' id='search-header'>Filter Coffee Locations:</Header>
               </Menu.Item>
               <Menu.Item>
                <VenueList
