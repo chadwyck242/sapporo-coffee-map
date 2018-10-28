@@ -90,12 +90,12 @@ class App extends Component {
 
     venues.forEach(function(venue){
       let contentString = `<aside>
-                              <div class='info-content' tabindex='0'>
-                                <h3>${venue.name}</h4>
-                                <p class='info-address'>${venue.location.formattedAddress}</p>
-                                <h4 class='api-attribution'>Powered by FourSquare Places</h5>
-                              </div>
-                            </aside>`
+                            <div class='info-content' tabindex='0'>
+                              <h3>${venue.name}</h4>
+                              <p class='info-address'>${venue.location.formattedAddress}</p>
+                              <h4 class='api-attribution'>Powered by FourSquare Places</h5>
+                            </div>
+                          </aside>`
 
       let marker = new window.google.maps.Marker({
         position: {
@@ -122,7 +122,7 @@ class App extends Component {
       });
       markers.push(marker);
     });
-    this.setState({ markers: this.state.markers })
+    this.setState({ markers: [...markers] })
     console.log('Markers', this.state.markers)
   }
 
@@ -130,7 +130,7 @@ class App extends Component {
     const { markers, venues, visible } = this.state
     return (
         <Container fluid style={{ height: '100vh' }} >
-          <Menu stackable inverted fluid style={{ margin: 0, padding: '0' }} size='large'>
+          <Menu stackable inverted fluid style={{ margin: '0', padding: '0' }} size='large'>
             <Menu.Item header>
               <Header as='h1' color='orange' floated='left'>Sapporo Coffee Locations</Header>
               <Icon name='coffee' size='large' fitted circular inverted color='orange' />
@@ -163,6 +163,7 @@ class App extends Component {
               vertical
               aria-label='Search Menu'
               visible={visible}
+              width='wide'
             >
               <Menu.Item header>
                 <Header as='h3' color='red' id='search-header'>Filter Coffee Locations:</Header>
